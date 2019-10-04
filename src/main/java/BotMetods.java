@@ -148,31 +148,41 @@ public class BotMetods extends Start {
 
         };
         if (getText.equals("Худи 50%\uD83C\uDF70")){
-            users.overMoney(getId, 200);
+            users.overMoney(getId, 200, "hoodie");
             return;
         };
         if (getText.equals("Болванка" + "\uD83D\uDC55")) {
-            users.overMoney(getId, 70);
+            users.overMoney(getId, 70, "bolvanka");
             return;
         }
         if (getText.equals("Прем ткань" + "\uD83D\uDE4F")){
-            users.overMoney(getId, 60);
+            users.overMoney(getId, 60, "premCloth");
             return;
         }
         if (getText.equals("Люкс ткань" + "\uD83D\uDE4C")) {
-            users.overMoney(getId, 80);
+            users.overMoney(getId, 80, "luxCloth");
             return;
         }
         if (getText.equals("Две ткани" + "\uD83C\uDF53")){
-            users.overMoney(getId, 60);
+            users.overMoney(getId, 60, "twoForPriceCloth");
             return;
         }
         if (getText.equals("100р футболка" + "\uD83D\uDCB3")) {
-            users.overMoney(getId, 200);
+            users.overMoney(getId, 200, "shirtMoney");
             return;
         }
         if (getText.equals("статистика" + "\uD83D\uDCB9")) {
-            sendMessage("Вы заработали сегодня:" +users.getStaticDate(message.getChatId()) + " рублей");
+            sendMessage("Вы заработали сегодня " +users.getStaticDate(message.getChatId())[0] + " рублей" + "\n"
+            + "Ваша статистика апсейлов:" + "\n" +
+                    "Худи: " + users.getStaticDate(message.getChatId())[1] + "\n" +
+                            "Мегараспродажа: " + users.getStaticDate(message.getChatId())[2] + "\n" +
+                            "100р Футболка: " + users.getStaticDate(message.getChatId())[3] + "\n" +
+                            "Прем ткань: " + users.getStaticDate(message.getChatId())[4] + "\n" +
+                            "Люкс ткань: " + users.getStaticDate(message.getChatId())[5] + "\n" +
+                            "Две по цене одной прем: " + users.getStaticDate(message.getChatId())[6] + "\n" +
+                            "Болванка: " + users.getStaticDate(message.getChatId())[7] + "\n"
+            );
+
             return;
         }
         if (getText.equals("◀Назад")) {

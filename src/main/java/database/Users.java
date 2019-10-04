@@ -64,6 +64,14 @@ public class Users {
         postgresConnection.UpSailCalc(id, money);
     }
 
-    public int getStaticDate(long id) { return postgresConnection.getStaticDate(id);} //вывод статистики по апсейлам
+    public void overMoney(long id,int money, int nameUps) {
+       //postgresConnection.UpSailCalc(id, money, nameUps);
+    }
+
+    public void overMoney(long id,int money, String nameUps) {
+        postgresConnection.UpSailCalc(id, money, nameUps);
+    }
+
+    public int[] getStaticDate(long id) { return postgresConnection.getStaticDate(id);} //вывод статистики по апсейлам
 
 }

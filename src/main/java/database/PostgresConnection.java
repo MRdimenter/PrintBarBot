@@ -16,7 +16,9 @@ public class PostgresConnection {
     private static final String PASSWORD = "123";
     private static final String ADDUSERS = "insert into users (id, name, overmoney, date) values(?,?,?,?)";
     private static final String CalcMoney = "update users set overmoney = overmoney + ? where id = ?;";
-    private static final String INPUTDATE = "select overmoney from users where id = ?";
+    private static final String INPUTDATE = "select overmoney, hoodie, shirtmoney, premcloth, luxcloth, bolvanka, megasail, twoforpricecloth from users where id = ?";
+
+    //private static final String CalcMoneyUPS = "update users set overmoney = overmoney + ?, hoodie = hoodie + ? where id = ?;";
 
     Connection connection;
     Statement statement;
@@ -106,9 +108,37 @@ public class PostgresConnection {
         }
     }
 
+    public void UpSailCalc(long id, int overmoney, String nameUps) {
 
-    public int getStaticDate(long id) {
+        // "update users set overmoney = overmoney + ?, hoodie = hoodie + ? where id = ?;";
+        String CalcMoneyUPS = "update users set overmoney = overmoney + ?, " + nameUps + " = " + nameUps + " + ? " + " where id = ?;";
+        try {
+            log.info("id = " + id);
+            log.info("money=" + overmoney);
+            log.info("CalcMoneyUPS =" + nameUps);
+            preparedStatement = connection.prepareStatement(CalcMoneyUPS);
+            preparedStatement.setInt(1, overmoney);
+            preparedStatement.setInt(2, 1);
+            preparedStatement.setLong(3, id);
+
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public int[] getStaticDate(long id) {
+
         int overmoney = 0;
+        int megaSail = 0; //мегараспродажа
+        int bolvanka = 0; //болванка
+        int hoodie = 0; //худи
+        int premCloth = 0; //прем ткань
+        int luxCloth = 0; //люкс ткань
+        int twoForPriceCloth = 0; //две по цене одной прем
+        int shirtMoney = 0; //100р футболка
         try {
 
             preparedStatement = connection.prepareStatement(INPUTDATE);
@@ -119,22 +149,25 @@ public class PostgresConnection {
             while (resultSet.next()) { //изначально стоит на нулевой позиции
 
 
-                 overmoney = resultSet.getInt("overmoney");
-
-
-                log.info("overmoneyget = " + overmoney);
-
+                overmoney = resultSet.getInt("overmoney");
+                megaSail = resultSet.getInt("megaSail");
+                hoodie = resultSet.getInt("hoodie");
+                premCloth = resultSet.getInt("premCloth");
+                luxCloth = resultSet.getInt("luxCloth");
+                twoForPriceCloth = resultSet.getInt("twoForPriceCloth");
+                shirtMoney = resultSet.getInt("shirtMoney");
+                bolvanka = resultSet.getInt("bolvanka");
             }
 
 
-             } catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return overmoney;
+        return new int[]{overmoney, hoodie, megaSail, shirtMoney, premCloth, luxCloth, twoForPriceCloth, bolvanka};
     }
 
-    }
+}
 
 
 
