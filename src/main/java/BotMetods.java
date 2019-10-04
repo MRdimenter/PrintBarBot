@@ -13,8 +13,6 @@ import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -30,13 +28,9 @@ public class BotMetods extends Start {
 
     public BotMetods(Update update) {
         this.update = update;
-
+        this.message = update.getMessage();
     }
 
-    public BotMetods(Update update, Message message) {
-        this.update = update;
-        this.message = message;
-    }
 
 
 
@@ -49,6 +43,7 @@ public class BotMetods extends Start {
         if(message.getText().equals("/start")) {
             sendMessage("Привет, я неофициальный бот для работы в принтбаре! " +
                     "Я помогу собрать вам статистику ваших апсейлов :)");
+
             users.setId(update.getMessage().getChatId());
             users.setName("nickname");
             users.addUser();
@@ -117,6 +112,7 @@ public class BotMetods extends Start {
             keyboardFirstRow.clear();
             keyboardFirstRow.add("Худи 50%" + "\uD83C\uDF70");
             keyboardFirstRow.add("Болванка" + "\uD83D\uDC55");
+            keyboardFirstRow.add("МР" + "\uD83D\uDC8E");
             keyboardSecondRow.add("Прем ткань" + "\uD83D\uDE4F");
             keyboardSecondRow.add("Люкс ткань" + "\uD83D\uDE4C");
             keyboardSecondRow.add("Две ткани" + "\uD83C\uDF53");
@@ -137,7 +133,7 @@ public class BotMetods extends Start {
         long getId = update.getMessage().getChatId();
         if (getText.equals("+Ups" + "\uD83D\uDCB5")){
             sendMessage.setChatId(message.getChatId().toString());
-            sendMessage.setText("Добавьте апсейл:");
+            sendMessage.setText("Добавьте апсейл \uD83D\uDCA1" + "\uD83D\uDCA5" + "\uD83D\uDCB0");
 
             try {
                 execute(sendMessage);
@@ -149,6 +145,10 @@ public class BotMetods extends Start {
         };
         if (getText.equals("Худи 50%\uD83C\uDF70")){
             users.overMoney(getId, 200, "hoodie");
+            return;
+        };
+        if (getText.equals("МР" + "\uD83D\uDC8E")){
+            users.overMoney(getId, 35, "megasail");
             return;
         };
         if (getText.equals("Болванка" + "\uD83D\uDC55")) {
@@ -197,7 +197,7 @@ public class BotMetods extends Start {
             return;
         }
         sendMessage.setChatId(message.getChatId().toString());
-        sendMessage.setText("\uD83D\uDE0A");
+        sendMessage.setText("\uD83D\uDE0D");
 
         try {
             execute(sendMessage);

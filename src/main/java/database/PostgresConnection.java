@@ -157,6 +157,8 @@ public class PostgresConnection {
                 twoForPriceCloth = resultSet.getInt("twoForPriceCloth");
                 shirtMoney = resultSet.getInt("shirtMoney");
                 bolvanka = resultSet.getInt("bolvanka");
+
+
             }
 
 
