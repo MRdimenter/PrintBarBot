@@ -29,12 +29,12 @@ public class Start extends TelegramLongPollingBot {
      * @param update Содержит сообщение от пользователя.
      */
     public void onUpdateReceived(Update update) {
-        SendMessage sendMessage = new SendMessage();
+       // SendMessage sendMessage = new SendMessage();
 
         BotMetods botMetods = new BotMetods(update); //методы для бота
 
         botMetods.startBotForUser();
-        botMetods.setKeybord(sendMessage, update.getMessage().getText());
+        botMetods.setKeybord( update.getMessage().getText());
     }
 
     public String getBotUsername() {

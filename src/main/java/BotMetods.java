@@ -12,13 +12,15 @@ import java.util.List;
 import java.util.logging.Logger;
 
 public class BotMetods extends Start {
-  ;
+    SendMessage sendMessage = new SendMessage();
     Users users = new Users();
+
     private static Logger log = Logger.getLogger(Start.class.getName()); //логирование
 
     private Update update;
     private Message message;
-
+    private String getText;
+    private long getId;
     public BotMetods() {
     }
 
@@ -26,17 +28,16 @@ public class BotMetods extends Start {
 
         this.update = update;
         this.message = update.getMessage();
+        this.getText = update.getMessage().getText();
+        this.getId = update.getMessage().getChatId();
     }
-
-
-
 
 
     //Start dialog
     public void startBotForUser() {
         //log.info("Пользователь " + update.getMessage().getChatId().toString() + " отправил сообщение: " + message.getText());
 
-        if(message.getText().equals("/start")) {
+        if (message.getText().equals("/start")) {
             sendMessage("""
                     Привет, я неофициальный бот для работы в принтбаре!
                     Я помогу собрать вам статистику ваших апсейлов :)""");
@@ -50,7 +51,6 @@ public class BotMetods extends Start {
     }
 
 
-
     //Method for send message
     public void sendMessage(String text) {
         SendMessage sendMessage = new SendMessage();
@@ -58,16 +58,15 @@ public class BotMetods extends Start {
         sendMessage.setText(text); //отправляем сообщение
 
         try {
-            //setKeybord(sendMessage);
             execute(sendMessage);//отправляем сообщение
-
-
         } catch (TelegramApiException e) {
+            log.severe("Проблема с методом для отправки сообщения");
             e.printStackTrace();
         }
-     }
+    }
 
 
+    //Method for send photo
     public void sendPhoto(String url) {
 
         SendPhoto sendPhoto = new SendPhoto();
@@ -82,11 +81,11 @@ public class BotMetods extends Start {
     }
 
 
-    //определит клавиатуру под текстовой панелью
-    public void setKeybord(SendMessage sendMessage, String text) {
+    //Определяет клавиатуру под текстовой панелью
+    public void setKeybord( String text) {
 
 
-        sendMessage = new SendMessage();
+        //sendMessage = new SendMessage();
         sendMessage.enableMarkdown(true);
 
         // Создаем клавиуатуру
@@ -106,22 +105,21 @@ public class BotMetods extends Start {
         KeyboardRow keyboardThreeRow = new KeyboardRow();
         // Добавляем кнопки в первую строчку клавиатуры
 
-            keyboardFirstRow.add("+Ups" + "\uD83D\uDCB5");
-            keyboardFirstRow.add("статистика" + "\uD83D\uDCB9");
+        keyboardFirstRow.add(Button.UPS.toString());
+        keyboardFirstRow.add(Button.STATISTICS.toString());
 
-        if(text.equals("+Ups" + "\uD83D\uDCB5")) {
+        if (text.equals(Button.UPS.toString())) {
 
             keyboardFirstRow.clear();
-            keyboardFirstRow.add("Худи 50%" + "\uD83C\uDF70");
-            keyboardFirstRow.add("Болванка" + "\uD83D\uDC55");
-            keyboardFirstRow.add("МР" + "\uD83D\uDC8E");
-            keyboardSecondRow.add("Прем ткань" + "\uD83D\uDE4F");
-            keyboardSecondRow.add("Люкс ткань" + "\uD83D\uDE4C");
-            keyboardSecondRow.add("Две ткани" + "\uD83C\uDF53");
-            keyboardThreeRow.add("100р футболка" + "\uD83D\uDCB3");
-            keyboardThreeRow.add("◀Назад");
+            keyboardFirstRow.add(Button.HOODIE.toString());
+            keyboardFirstRow.add(Button.BOLVANKA.toString());
+            keyboardFirstRow.add(Button.MEGASAIL.toString());
+            keyboardSecondRow.add(Button.PREMCLOTH.toString());
+            keyboardSecondRow.add(Button.LUXCLOTH.toString());
+            keyboardSecondRow.add(Button.TWOFORPRICECLOTH.toString());
+            keyboardThreeRow.add(Button.SHIRTMONEY.toString());
+            keyboardThreeRow.add(Button.BACK.toString());
         }
-
 
 
         // Добавляем все строчки клавиатуры в список
@@ -131,9 +129,17 @@ public class BotMetods extends Start {
         keyboard.add(keyboardThreeRow);
         // и устанваливаем этот список нашей клавиатуре
         replyKeyboardMarkup.setKeyboard(keyboard);
-        String getText = update.getMessage().getText();
-        long getId = update.getMessage().getChatId();
-        if (getText.equals("+Ups" + "\uD83D\uDCB5")){
+
+
+        buttonProcessing();
+        }
+
+
+
+
+    /** Метод для обработки нажатия кнопок */
+    public void buttonProcessing() {
+        if (getText.equals(Button.UPS.toString())) {
             sendMessage.setChatId(message.getChatId().toString());
             sendMessage.setText("Добавьте апсейл \uD83D\uDCA1" + "\uD83D\uDCA5" + "\uD83D\uDCB0");
 
@@ -144,52 +150,54 @@ public class BotMetods extends Start {
             }
             return;
 
-        };
-        if (getText.equals("Худи 50%\uD83C\uDF70")){
+        }
+
+        if (getText.equals(Button.HOODIE.toString())) {
             users.overMoney(getId, 200, "hoodie");
             return;
-        };
-        if (getText.equals("МР" + "\uD83D\uDC8E")){
+        }
+
+        if (getText.equals(Button.MEGASAIL.toString())) {
             users.overMoney(getId, 35, "megasail");
             return;
-        };
-        if (getText.equals("Болванка" + "\uD83D\uDC55")) {
+        }
+
+        if (getText.equals(Button.BOLVANKA.toString())) {
             users.overMoney(getId, 70, "bolvanka");
             return;
         }
-        if (getText.equals("Прем ткань" + "\uD83D\uDE4F")){
+        if (getText.equals(Button.PREMCLOTH.toString())) {
             users.overMoney(getId, 60, "premCloth");
             return;
         }
-        if (getText.equals("Люкс ткань" + "\uD83D\uDE4C")) {
+        if (getText.equals(Button.LUXCLOTH.toString())) {
             users.overMoney(getId, 80, "luxCloth");
             return;
         }
-        if (getText.equals("Две ткани" + "\uD83C\uDF53")){
+        if (getText.equals(Button.TWOFORPRICECLOTH.toString())) {
             users.overMoney(getId, 60, "twoForPriceCloth");
             return;
         }
-        if (getText.equals("100р футболка" + "\uD83D\uDCB3")) {
+        if (getText.equals(Button.SHIRTMONEY.toString())) {
             users.overMoney(getId, 200, "shirtMoney");
             return;
         }
-        if (getText.equals("статистика" + "\uD83D\uDCB9")) {
-            sendMessage("Вы заработали сегодня " +users.getStaticDate(message.getChatId())[0] + " рублей" + "\n"
-            + "Ваша статистика апсейлов:" + "\n" +
+        if (getText.equals(Button.STATISTICS.toString())) {
+            sendMessage("Вы заработали сегодня " + users.getStaticDate(message.getChatId())[0] + " рублей" + "\n"
+                    + "Ваша статистика апсейлов:" + "\n" +
                     "Худи: " + users.getStaticDate(message.getChatId())[1] + "\n" +
-                            "Мегараспродажа: " + users.getStaticDate(message.getChatId())[2] + "\n" +
-                            "100р Футболка: " + users.getStaticDate(message.getChatId())[3] + "\n" +
-                            "Прем ткань: " + users.getStaticDate(message.getChatId())[4] + "\n" +
-                            "Люкс ткань: " + users.getStaticDate(message.getChatId())[5] + "\n" +
-                            "Две по цене одной прем: " + users.getStaticDate(message.getChatId())[6] + "\n" +
-                            "Болванка: " + users.getStaticDate(message.getChatId())[7] + "\n"
+                    "Мегараспродажа: " + users.getStaticDate(message.getChatId())[2] + "\n" +
+                    "100р Футболка: " + users.getStaticDate(message.getChatId())[3] + "\n" +
+                    "Прем ткань: " + users.getStaticDate(message.getChatId())[4] + "\n" +
+                    "Люкс ткань: " + users.getStaticDate(message.getChatId())[5] + "\n" +
+                    "Две по цене одной прем: " + users.getStaticDate(message.getChatId())[6] + "\n" +
+                    "Болванка: " + users.getStaticDate(message.getChatId())[7] + "\n"
             );
-
 
 
             return;
         }
-        if (getText.equals("◀Назад")) {
+        if (getText.equals(Button.BACK.toString())) {
             sendMessage.setChatId(message.getChatId().toString());
             sendMessage.setText("Основное меню");
 
@@ -200,24 +208,9 @@ public class BotMetods extends Start {
             }
             return;
         }
-        sendMessage.setChatId(message.getChatId().toString());
-        sendMessage.setText("\uD83D\uDE0D");
-
-        try {
-            execute(sendMessage);
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
-        return;
-
-
-
-
 
     }
 
 
-
-
-    }
+}
 
