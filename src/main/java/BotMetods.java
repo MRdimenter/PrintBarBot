@@ -1,14 +1,9 @@
-
-
-import com.google.inject.internal.cglib.reflect.$FastMember;
 import database.Users;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.methods.send.SendPhoto;
-import org.telegram.telegrambots.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
@@ -17,6 +12,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 public class BotMetods extends Start {
+  ;
     Users users = new Users();
     private static Logger log = Logger.getLogger(Start.class.getName()); //логирование
 
@@ -27,6 +23,7 @@ public class BotMetods extends Start {
     }
 
     public BotMetods(Update update) {
+
         this.update = update;
         this.message = update.getMessage();
     }
@@ -37,17 +34,17 @@ public class BotMetods extends Start {
 
     //Start dialog
     public void startBotForUser() {
-        message = update.getMessage();
-        log.info("Пользователь " + update.getMessage().getChatId().toString() + " отправил сообщение: " + message.getText());
+        //log.info("Пользователь " + update.getMessage().getChatId().toString() + " отправил сообщение: " + message.getText());
 
         if(message.getText().equals("/start")) {
-            sendMessage("Привет, я неофициальный бот для работы в принтбаре! " +
-                    "Я помогу собрать вам статистику ваших апсейлов :)");
+            sendMessage("""
+                    Привет, я неофициальный бот для работы в принтбаре!
+                    Я помогу собрать вам статистику ваших апсейлов :)""");
 
             users.setId(update.getMessage().getChatId());
             users.setName("nickname");
             users.addUser();
-
+            sendPhoto("https://blog-partnera.ru/wp-content/uploads/2017/12/printbar.png");
         }
 
     }
@@ -71,12 +68,17 @@ public class BotMetods extends Start {
      }
 
 
-    public void sendPhoto() {
+    public void sendPhoto(String url) {
 
         SendPhoto sendPhoto = new SendPhoto();
-        sendPhoto.setChatId(message.getChatId().toString());
-        sendPhoto.setPhoto("https://www.business.ru/images/articles/1915/1.jpg");
+        sendPhoto.setChatId(message.getChatId());
+        sendPhoto.setPhoto(url);
 
+        try {
+            sendPhoto(sendPhoto);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -182,6 +184,8 @@ public class BotMetods extends Start {
                             "Две по цене одной прем: " + users.getStaticDate(message.getChatId())[6] + "\n" +
                             "Болванка: " + users.getStaticDate(message.getChatId())[7] + "\n"
             );
+
+
 
             return;
         }

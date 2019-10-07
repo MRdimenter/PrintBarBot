@@ -5,7 +5,6 @@ import org.postgresql.util.PSQLException;
 
 import java.sql.*;
 import java.util.Calendar;
-
 import java.util.logging.Logger;
 
 public class PostgresConnection {
