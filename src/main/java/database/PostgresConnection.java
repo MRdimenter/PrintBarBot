@@ -24,6 +24,11 @@ public class PostgresConnection {
     PreparedStatement preparedStatement;
 
 
+    public static void main(String args[]) {
+
+        System.out.println( new Date(Calendar.getInstance().getTimeInMillis()));
+    }
+
     public PostgresConnection() {
         try {
             connection = DriverManager.getConnection(URL, USER, PASSWORD); //получение коннекшона
@@ -128,6 +133,7 @@ public class PostgresConnection {
     }
 
 
+    //Метод для получения статистики
     public int[] getStaticDate(long id) {
 
         int overmoney = 0;
@@ -167,6 +173,27 @@ public class PostgresConnection {
 
         return new int[]{overmoney, hoodie, megaSail, shirtMoney, premCloth, luxCloth, twoForPriceCloth, bolvanka};
     }
+
+    //метод для удаления апсейлов
+    public void deleteUps(long id, int overmoney, String nameUps) {
+        String CalcMoneyUPS = "update users set overmoney = overmoney -?, " + nameUps + " = " + nameUps + " - ? " + " where id = ? AND " + nameUps + ">= 1;";
+        try {
+            log.info("id = " + id);
+            log.info("money=" + overmoney);
+            log.info("CalcMoneyUPS =" + nameUps);
+            preparedStatement = connection.prepareStatement(CalcMoneyUPS);
+            preparedStatement.setInt(1, overmoney);
+            preparedStatement.setInt(2, 1);
+            preparedStatement.setLong(3, id);
+
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 
 }
 

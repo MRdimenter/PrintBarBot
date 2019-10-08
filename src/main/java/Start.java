@@ -1,6 +1,7 @@
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.TelegramBotsApi;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
+import org.telegram.telegrambots.api.objects.MessageEntity;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiRequestException;
@@ -34,7 +35,9 @@ public class Start extends TelegramLongPollingBot {
         BotMetods botMetods = new BotMetods(update); //методы для бота
 
         botMetods.startBotForUser();
-        botMetods.setKeybord( update.getMessage().getText());
+        botMetods.setKeybord(update.getMessage().getText());
+        MessageEntity messageEntity = (MessageEntity) update.getMessage().getEntities();
+//        log.info(messageEntity.getType());
     }
 
     public String getBotUsername() {

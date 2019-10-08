@@ -21,6 +21,7 @@ public class BotMetods extends Start {
     private Message message;
     private String getText;
     private long getId;
+
     public BotMetods() {
     }
 
@@ -46,6 +47,8 @@ public class BotMetods extends Start {
             users.setName("nickname");
             users.addUser();
             sendPhoto("https://blog-partnera.ru/wp-content/uploads/2017/12/printbar.png");
+
+
         }
 
     }
@@ -59,6 +62,7 @@ public class BotMetods extends Start {
 
         try {
             execute(sendMessage);//отправляем сообщение
+
         } catch (TelegramApiException e) {
             log.severe("Проблема с методом для отправки сообщения");
             e.printStackTrace();
@@ -82,7 +86,7 @@ public class BotMetods extends Start {
 
 
     //Определяет клавиатуру под текстовой панелью
-    public void setKeybord( String text) {
+    public void setKeybord(String text) {
 
 
         //sendMessage = new SendMessage();
@@ -107,10 +111,13 @@ public class BotMetods extends Start {
 
         keyboardFirstRow.add(Button.UPS.toString());
         keyboardFirstRow.add(Button.STATISTICS.toString());
+        keyboardSecondRow.add(Button.DELETEUPS.toString());
 
         if (text.equals(Button.UPS.toString())) {
 
             keyboardFirstRow.clear();
+            keyboardSecondRow.clear();
+            keyboardThreeRow.clear();
             keyboardFirstRow.add(Button.HOODIE.toString());
             keyboardFirstRow.add(Button.BOLVANKA.toString());
             keyboardFirstRow.add(Button.MEGASAIL.toString());
@@ -118,6 +125,20 @@ public class BotMetods extends Start {
             keyboardSecondRow.add(Button.LUXCLOTH.toString());
             keyboardSecondRow.add(Button.TWOFORPRICECLOTH.toString());
             keyboardThreeRow.add(Button.SHIRTMONEY.toString());
+            keyboardThreeRow.add(Button.BACK.toString());
+        }
+
+        if (text.equals(Button.DELETEUPS.toString())) {
+            keyboardFirstRow.clear();
+            keyboardSecondRow.clear();
+            keyboardThreeRow.clear();
+            keyboardFirstRow.add(Button.DHOODIE.toString());
+            keyboardFirstRow.add(Button.DBOLVANKA.toString());
+            keyboardFirstRow.add(Button.DMEGASAIL.toString());
+            keyboardSecondRow.add(Button.DPREMCLOTH.toString());
+            keyboardSecondRow.add(Button.DLUXCLOTH.toString());
+            keyboardSecondRow.add(Button.DTWOFORPRICECLOTH.toString());
+            keyboardThreeRow.add(Button.DSHIRTMONEY.toString());
             keyboardThreeRow.add(Button.BACK.toString());
         }
 
@@ -132,12 +153,13 @@ public class BotMetods extends Start {
 
 
         buttonProcessing();
-        }
+
+    }
 
 
-
-
-    /** Метод для обработки нажатия кнопок */
+    /**
+     * Метод для обработки нажатия кнопок
+     */
     public void buttonProcessing() {
         if (getText.equals(Button.UPS.toString())) {
             sendMessage.setChatId(message.getChatId().toString());
@@ -182,6 +204,58 @@ public class BotMetods extends Start {
             users.overMoney(getId, 200, "shirtMoney");
             return;
         }
+
+        /**Обработка кнопок удаления апсейлов */
+        if (getText.equals(Button.DHOODIE.toString())) {
+            users.deleteUPS(getId, 200, "hoodie");
+            return;
+        }
+
+        if (getText.equals(Button.DMEGASAIL.toString())) {
+            users.deleteUPS(getId, 35, "megasail");
+            return;
+        }
+
+        if (getText.equals(Button.DBOLVANKA.toString())) {
+            users.deleteUPS(getId, 70, "bolvanka");
+            return;
+        }
+
+        if (getText.equals(Button.DPREMCLOTH.toString())) {
+            users.deleteUPS(getId, 60, "premCloth");
+            return;
+        }
+
+        if (getText.equals(Button.DLUXCLOTH.toString())) {
+            users.deleteUPS(getId, 80, "luxCloth");
+            return;
+        }
+
+        if (getText.equals(Button.DTWOFORPRICECLOTH.toString())) {
+            users.deleteUPS(getId, 60, "twoForPriceCloth");
+            return;
+        }
+
+        if (getText.equals(Button.DSHIRTMONEY.toString())) {
+            users.deleteUPS(getId, 200, "shirtMoney");
+            return;
+        }
+
+        if (getText.equals(Button.DELETEUPS.toString())) { //кнопка меню для удаления апсейла
+
+            sendMessage.setChatId(message.getChatId().toString());
+            sendMessage.setText("Удалите апсейл \uD83D\uDE14" + "\uD83D\uDE33" + "\uD83D\uDE48");
+
+            try {
+                execute(sendMessage);
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+            return;
+
+
+            //
+        }
         if (getText.equals(Button.STATISTICS.toString())) {
             sendMessage("Вы заработали сегодня " + users.getStaticDate(message.getChatId())[0] + " рублей" + "\n"
                     + "Ваша статистика апсейлов:" + "\n" +
@@ -207,6 +281,15 @@ public class BotMetods extends Start {
                 e.printStackTrace();
             }
             return;
+        }
+
+        sendMessage.setChatId(message.getChatId().toString());
+        sendMessage.setText("\uD83D\uDE0D");
+
+        try {
+            execute(sendMessage);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
         }
 
     }
