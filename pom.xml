@@ -6,7 +6,21 @@
 
     <groupId>www.learning2019Telegram.com</groupId>
     <artifactId>learning2019Telegram</artifactId>
-    <version>8.0</version>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <compilerArgument>--enable-preview</compilerArgument>
+                    <source>13</source>
+                    <target>13</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
     <dependencies>
         <dependency>

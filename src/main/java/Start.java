@@ -1,7 +1,7 @@
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.TelegramBotsApi;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
-import org.telegram.telegrambots.api.objects.Message;
+import org.telegram.telegrambots.api.objects.MessageEntity;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiRequestException;
@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 
 public class Start extends TelegramLongPollingBot {
     private static Logger log = Logger.getLogger(Start.class.getName()); //логирование
+
     public static void main(String[] args) {
 
         ApiContextInitializer.init(); //инициализируем api
@@ -25,26 +26,29 @@ public class Start extends TelegramLongPollingBot {
 
     /**
      * Метод для приема сообщений.
+     *
      * @param update Содержит сообщение от пользователя.
      */
     public void onUpdateReceived(Update update) {
-        SendMessage sendMessage = new SendMessage();
+       // SendMessage sendMessage = new SendMessage();
 
         BotMetods botMetods = new BotMetods(update); //методы для бота
+
         botMetods.startBotForUser();
-        botMetods.setKeybord(sendMessage, update.getMessage().getText());
-        UpsSail upsSail = new UpsSail();
-        log.info("Total:" + upsSail.calcUps(update.getMessage().getText()));
-        log.info("" + upsSail.getTotal());
+        botMetods.setKeybord(update.getMessage().getText());
+        MessageEntity messageEntity = (MessageEntity) update.getMessage().getEntities();
+//        log.info(messageEntity.getType());
     }
 
     public String getBotUsername() {
-        return "mrdimenter_bot";
+        return "UpsailBot";
+        //return "mrdimenter_bot"; debug bot
 
     }
 
     public String getBotToken() {
-        return "767618403:AAGM54j3vmKkUWiyOQRvX0HRI1yxS2kO7iM";
+        // return "767618403:AAGM54j3vmKkUWiyOQRvX0HRI1yxS2kO7iM"; debug bot
+        return "737587067:AAGk9eIOkIK8U8zpE5M5uevbHgYTdbcoIn4";
     }
 }
 
